@@ -4,7 +4,7 @@ import { Todo } from "../models/Todo"; // Предполагаем, что у в
 // Получение всех задач
 export const getTodos = async (req: Request, res: Response) => {
   try {
-    const todos = await Todo.findAll();
+    const todos = await Todo.findAll({ order: ["id"] });
     res.json(todos);
   } catch (error) {
     console.error("Ошибка при получении задач:", error);
@@ -35,7 +35,7 @@ export const updateTodo = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Задача не найдена" });
       return;
     }
-
+    
     // Обновление полей задачи
     todo.title = title || todo.title;
     todo.description = description || todo.description;

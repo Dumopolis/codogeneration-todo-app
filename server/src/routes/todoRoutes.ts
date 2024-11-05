@@ -14,7 +14,7 @@ router.get("/todos", getTodos);
 // Создание новой задачи
 router.post("/todos", createTodo);
 
-// Создание новой задачи
+// Изменение задачи по ID
 router.put("/todos/:id", updateTodo);
 
 // Удаление задачи по ID

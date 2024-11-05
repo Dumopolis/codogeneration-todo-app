@@ -2,16 +2,17 @@ import { Container, Text, Title } from "@mantine/core";
 import { CheckBox } from "@shared/ui/checkBox";
 import { useState, type ChangeEventHandler } from "react";
 
-export const Todo = (todo: any) => {
+export const Todo = ({ updateTodo, ...todo }: any) => {
   const [checked, setChecked] = useState(todo.completed);
 
   const handleCheckedChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     setChecked(e.target.checked);
+    updateTodo({ id: todo.id, completed: e.target.checked });
     console.log(todo.id, "update todo with value", e.target.checked);
   };
   return (
     <Container
-      mt='xs'
+      mt="xs"
       mb="md"
       display="grid"
       p={0}

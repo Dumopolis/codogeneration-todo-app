@@ -1,8 +1,8 @@
+import { createTodo } from "@features/createTodo";
 import { Button, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { CheckBox } from "@shared/ui/checkBox";
-import { Input } from "@shared/ui/input";
 import { TextArea } from "@shared/ui/textArea";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const TodoForm = () => {
   const form = useForm({
@@ -13,9 +13,20 @@ export const TodoForm = () => {
       title: (value) => (value.length <= 0 ? "Title required" : null),
     },
   });
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: createTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
+
   const handleSubmit = (values: any) => {
     console.log(values);
+    mutation.mutate(values);
   };
+
   return (
     <form
       onSubmit={form.onSubmit(handleSubmit)}

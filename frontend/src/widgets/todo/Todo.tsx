@@ -1,14 +1,21 @@
+import type { Todo as TodoType } from "@entities/todo";
+import { updateTodo } from "@features/updateTodo";
 import { Container, Text, Title } from "@mantine/core";
 import { CheckBox } from "@shared/ui/checkBox";
-import { useState, type ChangeEventHandler } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { type ChangeEventHandler } from "react";
 
-export const Todo = ({ updateTodo, ...todo }: any) => {
-  const [checked, setChecked] = useState(todo.completed);
+export const Todo = ({ ...todo }: TodoType) => {
+  const queryClient = useQueryClient();
 
+  const mutation = useMutation({
+    mutationFn: updateTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos"] });
+    },
+  });
   const handleCheckedChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    setChecked(e.target.checked);
-    updateTodo({ id: todo.id, completed: e.target.checked });
-    console.log(todo.id, "update todo with value", e.target.checked);
+    mutation.mutate({ id: todo.id, completed: e.target.checked });
   };
   return (
     <Container
@@ -27,7 +34,7 @@ export const Todo = ({ updateTodo, ...todo }: any) => {
         {todo.description}
       </Text>
       <CheckBox
-        checked={checked}
+        checked={todo.completed}
         onChange={handleCheckedChange}
         style={{
           gridRow: "1 / 3",

@@ -1,6 +1,9 @@
 export const getTodos = async () => {
-  const todos = await [
-    { id: 1, title: "Title", description: "Description", completed: false },
-  ];
-  return todos;
+  try {
+    const todos = await fetch("http://localhost:8000/todos");
+    return todos.json();
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 };

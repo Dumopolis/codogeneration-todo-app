@@ -18,6 +18,7 @@ export const TodoForm = () => {
   const mutation = useMutation({
     mutationFn: createTodo,
     onSuccess: () => {
+      form.reset()
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
